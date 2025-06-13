@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Network Exchange</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a5298, #3a7bd5);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 30px auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            color: #f0b90b;
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #f0b90b, #ffde59);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .price-ticker {
+            background: rgba(240, 185, 11, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin: 15px auto;
+            display: inline-block;
+            font-weight: bold;
+            border: 1px solid rgba(240, 185, 11, 0.5);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-title i {
+            color: #f0b90b;
+            font-size: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #f0b90b;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #f0b90b;
+            box-shadow: 0 0 0 3px rgba(240, 185, 11, 0.3);
+        }
+
+        .amount-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        .amount-container input {
+            flex: 1;
+        }
+
+        .amount-container select {
+            width: 120px;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .info-box i {
+            color: #f0b90b;
+            margin-right: 8px;
+        }
+
+        .address-container {
+            position: relative;
+        }
+
+        .address-input {
+            padding-right: 50px;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #f0b90b;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #ffde59;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #f0b90b;
+            background: rgba(240, 185, 11, 0.1);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: #f0b90b;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #f0b90b, #ffc107);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(240, 185, 11, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn i {
+            font-size: 1.3rem;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #f0b90b, #ffc107);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .success-message {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            margin: 20px 0;
+        }
+
+        .success-message i {
+            font-size: 3rem;
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+
+        .success-message h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #2ecc71;
+        }
+
+        .exchange-rate {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .exchange-rate span {
+            color: #f0b90b;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: auto;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            gap: 15px;
+        }
+
+        .step {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #f0b90b;
+            color: #000;
+            border-radius: 50%;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .payment-method {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(240, 185, 11, 0.3);
+        }
+
+        .payment-method i {
+            font-size: 2.5rem;
+            color: #f0b90b;
+            margin-bottom: 15px;
+        }
+
+        .receive-currency {
+            margin-top: 15px;
+        }
+
+        .receive-currency label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .receive-currency i {
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .btc-icon { color: #f7931a; }
+        .eth-icon { color: #627eea; }
+        .ltc-icon { color: #345d9d; }
+        .usdt-icon { color: #26a17b; }
+        .doge-icon { color: #c2a633; }
+        .xrp-icon { color: #27a2db; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .steps {
+                flex-direction: column;
+            }
+            
+            .amount-container {
+                flex-direction: column;
+            }
+            
+            .amount-container select {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-coins logo-icon"></i>
+                <h1>Pi Network Exchange</h1>
+            </div>
+            <p class="subtitle">Exchange your Pi coins securely and instantly. Trusted by thousands of Pi Network users worldwide.</p>
+            <div class="price-ticker">
+                Current Pi Price: $0.6314
+            </div>
+        </header>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Enter Amount</h3>
+                <p>Specify how much Pi you want to exchange</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Send Pi</h3>
+                <p>Transfer to our Pi wallet address</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Upload Proof</h3>
+                <p>Provide transaction screenshot</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Receive Funds</h3>
+                <p>Get your exchanged currency</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-exchange-alt"></i>
+                <h2>Exchange Pi Coins</h2>
+            </div>
+
+            <div class="form-group">
+                <label for="amount"><i class="fas fa-coins"></i> Amount to Exchange</label>
+                <div class="amount-container">
+                    <input type="number" id="amount" placeholder="Enter Pi amount" min="1" value="10">
+                    <select id="currency">
+                        <option value="usd">USD</option>
+                        <option value="eur">EUR</option>
+                        <option value="gbp">GBP</option>
+                        <option value="btc">Bitcoin</option>
+                        <option value="eth">Ethereum</option>
+                        <option value="ltc">Litecoin</option>
+                        <option value="usdt">Tether (USDT)</option>
+                        <option value="doge">Dogecoin</option>
+                        <option value="xrp">XRP</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="exchange-rate">
+                <div>Current Rate:</div>
+                <div>1 π = <span>$.06314</span></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+
+            <div class="info-box">
+                <p><i class="fas fa-info-circle"></i> Send exactly the amount of Pi you entered above to our Pi wallet address below:</p>
+            </div>
+
+            <div class="payment-method">
+                <i class="fab fa-google-pay"></i>
+                <h3>Pi Network Payment</h3>
+                <p>Send your Pi coins to the following address:</p>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <div class="address-container">
+                        <input type="text" class="address-input" id="pi-address" value="MD5HGPHVL73EBDUD2Z4K2VDRLUBC4FFN7GOBLKPK6OPPXH6TED4TQAAAAGK2PHNAEUZH6" readonly>
+                        <button class="copy-btn" id="copy-pi-btn"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-wallet"></i> Your Receiving Wallet Address</label>
+                <div class="receive-currency">
+                    <label for="btc-wallet">
+                        <i class="fab fa-bitcoin btc-icon"></i>
+                        <span>Bitcoin (BTC) Address:</span>
+                    </label>
+                    <input type="text" id="btc-wallet" placeholder="Enter your Bitcoin wallet address">
+                    
+                    <label for="eth-wallet" style="margin-top: 15px;">
+                        <i class="fab fa-ethereum eth-icon"></i>
+                        <span>Ethereum (ETH) Address:</span>
+                    </label>
+                    <input type="text" id="eth-wallet" placeholder="Enter your Ethereum wallet address">
+                    
+                    <label for="ltc-wallet" style="margin-top: 15px;">
+                        <i class="fas fa-coins ltc-icon"></i>
+                        <span>Litecoin (LTC) Address:</span>
+                    </label>
+                    <input type="text" id="ltc-wallet" placeholder="Enter your Litecoin wallet address">
+                    
+                    <label for="usdt-wallet" style="margin-top: 15px;">
+                        <i class="fas fa-dollar-sign usdt-icon"></i>
+                        <span>Tether (USDT) Address:</span>
+                    </label>
+                    <input type="text" id="usdt-wallet" placeholder="Enter your USDT wallet address (ERC20/TRC20)">
+                    
+                    <label for="doge-wallet" style="margin-top: 15px;">
+                        <i class="fab fa-reddit-alien doge-icon"></i>
+                        <span>Dogecoin (DOGE) Address:</span>
+                    </label>
+                    <input type="text" id="doge-wallet" placeholder="Enter your Dogecoin wallet address">
+                    
+                    <label for="xrp-wallet" style="margin-top: 15px;">
+                        <i class="fas fa-wallet xrp-icon"></i>
+                        <span>XRP Address:</span>
+                    </label>
+                    <input type="text" id="xrp-wallet" placeholder="Enter your XRP wallet address (with Destination Tag if needed)">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-camera"></i> Transaction Proof (Screenshot)</label>
+                <div class="file-upload">
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-text">Click or drag to upload screenshot</div>
+                        <div class="upload-subtext">PNG, JPG, or GIF (Max 5MB)</div>
+                        <input type="file" id="file-input" class="hidden" accept="image/*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-container hidden" id="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <button class="btn" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> Complete Exchange
+            </button>
+        </div>
+
+        <div class="success-message" id="success-message">
+            <i class="fas fa-check-circle"></i>
+            <h3>Exchange Successful!</h3>
+            <p>Your Pi coins have been successfully exchanged.</p>
+            <p>Funds will be transferred to your account within 24 hours.</p>
+            <p>A confirmation email has been sent to your inbox.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Security & Trust</h2>
+            </div>
+            <div class="info-box">
+                <p><i class="fas fa-lock"></i> All transactions are secured with bank-level encryption</p>
+                <p><i class="fas fa-user-shield"></i> Verified by thousands of Pi Network users</p>
+                <p><i class="fas fa-clock"></i> Average processing time: less than 12 hours</p>
+                <p><i class="fas fa-headset"></i> 24/7 customer support</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Pi Network Exchange. All rights reserved.</p>
+        <p>This service is not affiliated with the official Pi Network core team.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set Pi price to 3.14
+            const piPrice = 0.6314;
+            
+            // Update exchange rate display
+            function updateExchangeRate() {
+                const amount = parseFloat(document.getElementById('amount').value) || 0;
+                const total = (amount * piPrice).toFixed(2);
+                document.querySelector('.exchange-rate span').textContent = `$${piPrice}`;
+            }
+            
+            // Initialize exchange rate
+            updateExchangeRate();
+            
+            // Update when amount changes
+            document.getElementById('amount').addEventListener('input', updateExchangeRate);
+            
+            // Copy Pi address functionality
+            const copyPiBtn = document.getElementById('copy-pi-btn');
+            const piAddress = document.getElementById('pi-address');
+            
+            copyPiBtn.addEventListener('click', function() {
+                piAddress.select();
+                document.execCommand('copy');
+                
+                // Visual feedback
+                const originalText = copyPiBtn.innerHTML;
+                copyPiBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyPiBtn.style.background = '#2ecc71';
+                
+                setTimeout(() => {
+                    copyPiBtn.innerHTML = originalText;
+                    copyPiBtn.style.background = '#f0b90b';
+                }, 2000);
+            });
+            
+            // File upload functionality
+            const uploadArea = document.getElementById('upload-area');
+            const fileInput = document.getElementById('file-input');
+            
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const fileName = this.files[0].name;
+                    uploadArea.innerHTML = `
+                        <i class="fas fa-file-image"></i>
+                        <div class="upload-text">${fileName}</div>
+                        <div class="upload-subtext">Click to change file</div>
+                    `;
+                }
+            });
+            
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#f0b90b';
+                uploadArea.style.backgroundColor = 'rgba(240, 185, 11, 0.1)';
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                uploadArea.style.backgroundColor = 'transparent';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                uploadArea.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    fileInput.files = e.dataTransfer.files;
+                    const fileName = e.dataTransfer.files[0].name;
+                    uploadArea.innerHTML = `
+                        <i class="fas fa-file-image"></i>
+                        <div class="upload-text">${fileName}</div>
+                        <div class="upload-subtext">Click to change file</div>
+                    `;
+                }
+            });
+            
+            // Form submission
+            const submitBtn = document.getElementById('submit-btn');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const successMessage = document.getElementById('success-message');
+            
+            submitBtn.addEventListener('click', function() {
+                const amount = document.getElementById('amount').value;
+                const email = document.getElementById('email').value;
+                const file = fileInput.files[0];
+                const selectedCurrency = document.getElementById('currency').value;
+                
+                // Get the receiving wallet address based on selected currency
+                let receivingWallet = '';
+                switch(selectedCurrency) {
+                    case 'btc':
+                        receivingWallet = document.getElementById('btc-wallet').value;
+                        break;
+                    case 'eth':
+                        receivingWallet = document.getElementById('eth-wallet').value;
+                        break;
+                    case 'ltc':
+                        receivingWallet = document.getElementById('ltc-wallet').value;
+                        break;
+                    case 'usdt':
+                        receivingWallet = document.getElementById('usdt-wallet').value;
+                        break;
+                    case 'doge':
+                        receivingWallet = document.getElementById('doge-wallet').value;
+                        break;
+                    case 'xrp':
+                        receivingWallet = document.getElementById('xrp-wallet').value;
+                        break;
+                    default:
+                        // For fiat currencies
+                        receivingWallet = 'Bank transfer';
+                }
+                
+                // Simple validation
+                if (!amount || amount < 1) {
+                    alert('Please enter a valid Pi amount');
+                    return;
+                }
+                
+                if (selectedCurrency !== 'usd' && selectedCurrency !== 'eur' && selectedCurrency !== 'gbp' && !receivingWallet) {
+                    alert(`Please enter your ${selectedCurrency.toUpperCase()} receiving wallet address`);
+                    return;
+                }
+                
+                if (!email || !email.includes('@')) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                if (!file) {
+                    alert('Please upload a screenshot of your transaction');
+                    return;
+                }
+                
+                // Show progress bar
+                progressContainer.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                // Simulate processing
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 2;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        // Show success message
+                        setTimeout(() => {
+                            successMessage.style.display = 'block';
+                            progressContainer.classList.add('hidden');
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Complete Exchange';
+                            
+                            // Scroll to success message
+                            successMessage.scrollIntoView({ behavior: 'smooth' });
+                        }, 300);
+                    }
+                }, 50);
+            });
+        });
+    </script>
+</body>
+</html>
